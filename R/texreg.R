@@ -3364,7 +3364,8 @@ coeftostring <- function(x, lead.zero = FALSE, digits = 2) {
   return(y)
 }
 
-#' Compute maximum column width left and right of a decimal separator lorem ipsum
+#' Compute maximum column width left and right of a decimal separator 
+#' loreipsum
 #'
 #' Compute maximum column width left and right of a decimal separator.
 #'
@@ -3400,8 +3401,8 @@ compute.width <- function(v, left = TRUE, single.row = FALSE, bracket = ")") {
     ssp <- strsplit(v, "\\.")
     left.side <- character()
     right.side <- character()
-    ssp <- ssp[!grepl("multicolumn")]
-    print("using this")
+    ssp <- ssp[!grepl("multicolumn", ssp)]
+    ssp <- ssp[!grepl("checkmark", ssp)]
     for (i in 1:length(ssp)) {
       if (length(ssp[[i]]) == 1) {
         ssp[[i]][2] <- ""
