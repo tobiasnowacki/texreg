@@ -2805,6 +2805,7 @@ texreg <- function(l,
                    dep.var = "Dependent Variable",
                    dv.names = NULL,
                    dv.span = NULL,
+                   custom.notesize = NULL,
                    ...) {
 
   # check dcolumn vs. bold
@@ -2992,32 +2993,45 @@ texreg <- function(l,
     }
     string <- paste0(string, "\\begin{tabular}{", coldef, "}", linesep)
     ## Additions
-    string <- paste0(string, "\\\\[-1.8ex]\\hline", linesep)
-    string <- paste0(string, "& \\multicolumn{", length(l), 
-                     "}{c}{\\textit{Dependent variable:}} \\\\", linesep)
-    string <- paste0(string, "\\cline{2-",length(mod.names), "}", linesep)
-    string <- paste0(string, "\\\\[-1.8ex] & \\multicolumn{", length(l), 
-                     "}{c}{", dep.var, "} \\\\", linesep)
+    # string <- paste0(string, "\\\\[-1.8ex]\\hline", linesep)
+    # string <- paste0(string, "& \\multicolumn{", length(l), 
+    #                  "}{c}{\\textit{Dependent variable:}} \\\\", linesep)
+    # string <- paste0(string, "\\cline{2-",length(mod.names), "}", linesep)
+    # string <- paste0(string, "\\\\[-1.8ex] & \\multicolumn{", length(l), 
+    #                  "}{c}{", dep.var, "} \\\\", linesep)
   }
 
   # horizontal rule above the table
   tablehead <- ""
   if (isTRUE(booktabs)) {
-    tablehead <- paste0(tablehead, "\\toprule", linesep)
+    tablehead <- paste0(tablehead, "\\toprule", "\n")
   } else {
-    tablehead <- paste0(tablehead, "\\hline", linesep)
+    tablehead <- paste0(tablehead, "\\hline", "\n")
   }
+
 
   # specify dep var
   tablehead <- paste0(tablehead, dv.names[1])
     for (i in 2:length(dv.names)) {
         tablehead <- paste0(tablehead, " & \\multicolumn{", dv.span[i], "}{c}{", dv.names[i], "}")
+      }    
+  tablehead <- paste0(tablehead, "\\\\", linesep)
+    for (i in 2:length(dv.span)) {
+      if (i == 1){
+        val1 <- 2
+        val2 <- 1 + dv.span[1]
+      } else{
+      val1 <- sum(dv.span[1:(i - 1)]) + 1
+      val2 <- sum(dv.span[1:i])
+      print(c(i, val2))
       }
+      tablehead <- paste0(tablehead, "\\cmidrule(lr){", val1, "-", val2, "}")
     }
+  tablehead <- paste0(tablehead, "\\\\", linesep)
 
 
   # specify model names
-  tablehead <- paste0(tablehead, mod.names[1])
+  tablehead <- paste0(tablehead, "[-2.8ex]", mod.names[1])
   if (isTRUE(dcolumn)) {
     for (i in 2:length(mod.names)) {
       if (coltypes[i] != "coef") {
@@ -3070,6 +3084,10 @@ texreg <- function(l,
   } else if (fontsize == "Huge") {
     notesize <- "Large"
   }
+  if(!is.null(custom.notesize)){
+    notesize <- custom.notesize
+  }
+
   if (is.null(custom.note)) {
     if (snote == "") {
       note <- ""
