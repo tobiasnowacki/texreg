@@ -2802,6 +2802,9 @@ texreg <- function(l,
                    fontsize = NULL,
                    scalebox = NULL,
                    float.pos = "",
+                   dep.var = "Dependent Variable",
+                   dv.names = NULL,
+                   dv.span = NULL
                    ...) {
 
   # check dcolumn vs. bold
@@ -2988,6 +2991,13 @@ texreg <- function(l,
       }
     }
     string <- paste0(string, "\\begin{tabular}{", coldef, "}", linesep)
+    ## Additions
+    string <- paste0(string, "\\\\[-1.8ex]\\hline", linesep)
+    string <- paste0(string, "& \\multicolumn{", length(l), 
+                     "}{c}{\\textit{Dependent variable:}} \\\\", linesep)
+    string <- paste0(string, "\\cline{2-",length(mod.names), "}", linesep)
+    string <- paste0(string, "\\\\[-1.8ex] & \\multicolumn{", length(l), 
+                     "}{c}{", dep.var, "} \\\\", linesep)
   }
 
   # horizontal rule above the table
@@ -2997,6 +3007,14 @@ texreg <- function(l,
   } else {
     tablehead <- paste0(tablehead, "\\hline", linesep)
   }
+
+  # specify dep var
+  tablehead <- paste0(tablehead, dv.names[1])
+    for (i in 2:length(dv.names)) {
+        tablehead <- paste0(tablehead, " & \\multicolumn{", dv.span[i], "}{c}{", dv.names[i], "}")
+      }
+    }
+
 
   # specify model names
   tablehead <- paste0(tablehead, mod.names[1])
