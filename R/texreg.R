@@ -2804,7 +2804,7 @@ texreg <- function(l,
                    float.pos = "",
                    dep.var = "Dependent Variable",
                    dv.names = NULL,
-                   dv.span = NULL
+                   dv.span = NULL,
                    ...) {
 
   # check dcolumn vs. bold
